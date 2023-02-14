@@ -1,39 +1,39 @@
-const express = require('express')
-const cors = require('cors')
-const dotenv = require('dotenv')
-const PORT = process.env.PORT || 4000
-const app = express()
-const mongoose = require('mongoose')
-const { createServer } = require('http')
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const PORT = process.env.PORT || 4000;
+const app = express();
+const mongoose = require("mongoose");
+const { createServer } = require("http");
 
-dotenv.config()
+dotenv.config();
+mongoose.set("strictQuery", false);
+mongoose.connect(process.env.MONGODB_URI);
 
-mongoose.connect(process.env.MONGODB_URI)
+app.use(express.json());
 
-app.use(express.json())
+const server = createServer(app);
 
-const server = createServer(app)
-
-app.use(cors())
+app.use(cors());
 
 // Root Route, not used in API
-app.get('/', (req,res) => {
-  res.json({ success: "Success" })
-})
+app.get("/", (req, res) => {
+  res.json({ success: "Success" });
+});
 
 // Authentication Route
-app.use('/api/auth', require('./routes/auth'))
+app.use("/api/auth", require("./routes/auth"));
 
 // Category Route
-app.use('/api/category', require('./routes/category'))
+app.use("/api/category", require("./routes/category"));
 
 // Product Route
-app.use('/api/product', require('./routes/product'))
+app.use("/api/product", require("./routes/product"));
 
 // Order Route
-app.use('/api/order', require('./routes/order'))
+app.use("/api/order", require("./routes/order"));
 
-server.listen(PORT, ()=> {
-  if(process.env.NODE_ENV !== 'production')
-    console.log('Server running on http://localhost:'+PORT)
-})
+server.listen(PORT, () => {
+  if (process.env.NODE_ENV !== "production")
+    console.log("Server running on http://localhost:" + PORT);
+});
